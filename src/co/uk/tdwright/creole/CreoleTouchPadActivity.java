@@ -40,18 +40,18 @@ public class CreoleTouchPadActivity extends Activity {
 	private static final String INTENSITY_BROADCAST = "co.uk.tdwright.creole.INTENSITY_BROADCAST";
 	
 	// For the vibration
-	private EffectHandle m_hEffectMagSweep = null;
-	private MagSweepEffectDefinition m_defMagSweep = new MagSweepEffectDefinition(
-			ImmVibe.VIBE_TIME_INFINITE,		// duration
-			0,								// magnitude
-			ImmVibe.VIBE_DEFAULT_STYLE,		// style
-			0,								// attackTime
-			0,								// attackLevel
-			0,								// fadeTime
-			0,								// fadeLevel
-			0								// actuatorIndex
-		);
-	private Device m_device;
+//	private EffectHandle m_hEffectMagSweep = null;
+//	private MagSweepEffectDefinition m_defMagSweep = new MagSweepEffectDefinition(
+//			ImmVibe.VIBE_TIME_INFINITE,		// duration
+//			0,								// magnitude
+//			ImmVibe.VIBE_DEFAULT_STYLE,		// style
+//			0,								// attackTime
+//			0,								// attackLevel
+//			0,								// fadeTime
+//			0,								// fadeLevel
+//			0								// actuatorIndex
+//		);
+//	private Device m_device;
 
     /** Called when the activity is first created. */
     @Override
@@ -71,7 +71,7 @@ public class CreoleTouchPadActivity extends Activity {
         screenWidth = size.x;
         screenHeight = size.y;
         
-        m_device = Device.newDevice(getApplicationContext());
+        //m_device = Device.newDevice(getApplicationContext());
         
         bindService(new Intent(CreoleTouchPadActivity.this, CreoleConnectionService.class), serviceConnection, Context.BIND_AUTO_CREATE);
     }
@@ -79,34 +79,34 @@ public class CreoleTouchPadActivity extends Activity {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
     	final int action = event.getAction();
-    	switch (action & MotionEvent.ACTION_MASK) {
-    	case MotionEvent.ACTION_DOWN:
-    		try
-    		{
-    			sendCoords(event.getX(), event.getY());
-    			m_defMagSweep.setStyle(ImmVibe.VIBE_STYLE_SHARP);
-	    		m_hEffectMagSweep = m_device.playMagSweepEffect(m_defMagSweep);
-    		}
-    		catch (RuntimeException re) {}
-    		break;
-    	case MotionEvent.ACTION_MOVE:
-    		try
-    		{
-    			sendCoords(event.getX(), event.getY());
-    			m_defMagSweep.setStyle(ImmVibe.VIBE_STYLE_STRONG);
-	    		m_hEffectMagSweep.modifyPlayingMagSweepEffect(m_defMagSweep);
-    		}
-    		catch (RuntimeException re) {}
-    		break;
-    	case MotionEvent.ACTION_UP:
-    		try
-    		{
-    			m_hEffectMagSweep.stop();
-    			sendCoords(0,0,true);
-    		}
-    		catch (RuntimeException re) {}
-    		break;
-    	}
+//    	switch (action & MotionEvent.ACTION_MASK) {
+//    	case MotionEvent.ACTION_DOWN:
+//    		try
+//    		{
+//    			sendCoords(event.getX(), event.getY());
+//    			m_defMagSweep.setStyle(ImmVibe.VIBE_STYLE_SHARP);
+//	    		m_hEffectMagSweep = m_device.playMagSweepEffect(m_defMagSweep);
+//    		}
+//    		catch (RuntimeException re) {}
+//    		break;
+//    	case MotionEvent.ACTION_MOVE:
+//    		try
+//    		{
+//    			sendCoords(event.getX(), event.getY());
+//    			m_defMagSweep.setStyle(ImmVibe.VIBE_STYLE_STRONG);
+//	    		m_hEffectMagSweep.modifyPlayingMagSweepEffect(m_defMagSweep);
+//    		}
+//    		catch (RuntimeException re) {}
+//    		break;
+//    	case MotionEvent.ACTION_UP:
+//    		try
+//    		{
+//    			m_hEffectMagSweep.stop();
+//    			sendCoords(0,0,true);
+//    		}
+//    		catch (RuntimeException re) {}
+//    		break;
+//    	}
     	return false;
     }
 
@@ -149,15 +149,15 @@ public class CreoleTouchPadActivity extends Activity {
 //	        	Log.v(TAG, Integer.toString(thousandths));
 	        	proportion = (double)thousandths / 1000d;
     		}
-        	int vibePower = (int)Math.floor(proportion * (double)ImmVibe.VIBE_MAX_MAGNITUDE);
-        	Log.v(TAG, "Vibe power: " + Integer.toString(vibePower));
-        	if (vibePower > ImmVibe.VIBE_MAX_MAGNITUDE) vibePower = ImmVibe.VIBE_MAX_MAGNITUDE;
-        	m_defMagSweep.setMagnitude(vibePower);
-        	if(m_hEffectMagSweep!=null) {
-	        	if(m_hEffectMagSweep.isPlaying()) {
-	        		m_hEffectMagSweep.modifyPlayingMagSweepEffect(m_defMagSweep);
-	        	} // else wait for a touch event
-    		}
+//        	int vibePower = (int)Math.floor(proportion * (double)ImmVibe.VIBE_MAX_MAGNITUDE);
+//        	Log.v(TAG, "Vibe power: " + Integer.toString(vibePower));
+//        	if (vibePower > ImmVibe.VIBE_MAX_MAGNITUDE) vibePower = ImmVibe.VIBE_MAX_MAGNITUDE;
+//        	m_defMagSweep.setMagnitude(vibePower);
+//        	if(m_hEffectMagSweep!=null) {
+//	        	if(m_hEffectMagSweep.isPlaying()) {
+//	        		m_hEffectMagSweep.modifyPlayingMagSweepEffect(m_defMagSweep);
+//	        	} // else wait for a touch event
+//    		}
     	} catch (NumberFormatException nfe) {
     		Log.d(TAG, "Received non-numerical intensity value.");
     	}
@@ -195,12 +195,12 @@ public class CreoleTouchPadActivity extends Activity {
 				setStatusText(extras.getString("status"));
 				if(extras.getBoolean("connected")==false)
 				{
-		        	if(m_hEffectMagSweep!=null) {
-			        	if(m_hEffectMagSweep.isPlaying()) {
-			        		m_hEffectMagSweep.stop();
-			        		m_defMagSweep.setMagnitude(0);
-			        	}
-		        	}
+//		        	if(m_hEffectMagSweep!=null) {
+//			        	if(m_hEffectMagSweep.isPlaying()) {
+//			        		m_hEffectMagSweep.stop();
+//			        		m_defMagSweep.setMagnitude(0);
+//			        	}
+//		        	}
 				}
 			}
 		}
